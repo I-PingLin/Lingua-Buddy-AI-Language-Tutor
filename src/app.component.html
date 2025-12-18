@@ -1,0 +1,26 @@
+<div class="flex flex-col h-screen antialiased text-gray-800">
+  <header class="p-4 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-4xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-blue-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 inline-block mr-2 -mt-1" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.92 17H13v-1h6.92c-.2.35-.43.69-.68 1zm1.01-3H13v-1h7.93c-.04.34-.11.67-.19 1z"/>
+        </svg>
+        {{ title }}
+      </h1>
+      <div class="flex items-center space-x-2">
+        <label for="language-select" class="text-sm font-medium text-gray-600">Practice:</label>
+        <select id="language-select" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                (change)="onLanguageChange($event)">
+          @for (lang of languages; track lang) {
+            <option [value]="lang" [selected]="lang === selectedLanguage()">{{ lang }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow p-2 sm:p-4">
+    <app-chat [language]="selectedLanguage()"></app-chat>
+  </main>
+</div>

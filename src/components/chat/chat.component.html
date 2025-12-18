@@ -1,0 +1,55 @@
+<div class="flex flex-col h-full max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
+  <!-- Chat messages area -->
+  <div #chatContainer class="flex-1 p-6 space-y-4 overflow-y-auto">
+    @for (message of messages(); track $index) {
+      <div class="flex" [class.justify-end]="message.role === 'user'" [class.justify-start]="message.role === 'model'">
+        <div class="max-w-xs md:max-w-md lg:max-w-2xl px-4 py-2 rounded-xl" 
+             [class.bg-blue-500]="message.role === 'user'" 
+             [class.text-white]="message.role === 'user'" 
+             [class.bg-gray-200]="message.role === 'model'" 
+             [class.text-gray-800]="message.role === 'model'">
+          
+          @if (message.role === 'model' && !message.content && isLoading()) {
+            <div class="flex items-center justify-center space-x-1 py-1">
+              <span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse [animation-delay:-0.3s]"></span>
+              <span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse [animation-delay:-0.15s]"></span>
+              <span class="w-2 h-2 bg-gray-500 rounded-full animate-pulse"></span>
+            </div>
+          } @else {
+            <p class="text-sm whitespace-pre-wrap">{{ message.content }}</p>
+          }
+
+        </div>
+      </div>
+    }
+    @if (error()) {
+      <div class="p-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+        <span class="font-medium">Error:</span> {{ error() }}
+      </div>
+    }
+  </div>
+
+  <!-- Input area -->
+  <div class="p-4 bg-gray-50 border-t border-gray-200">
+    <form (submit)="sendMessage(); $event.preventDefault()">
+      <div class="flex items-center space-x-3">
+        <textarea 
+          class="flex-1 w-full p-3 text-sm text-gray-700 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" 
+          rows="1" 
+          placeholder="Type your message..."
+          [value]="userInput()"
+          (input)="onInputChange($event)"
+          (keydown.enter)="$event.shiftKey ? null : (sendMessage(), $event.preventDefault())"
+          [disabled]="isLoading()"></textarea>
+        <button 
+          type="submit" 
+          class="inline-flex items-center justify-center w-12 h-12 text-white bg-blue-500 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed transition-colors"
+          [disabled]="isLoading() || !userInput().trim()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 transform rotate-45 -mr-px" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
